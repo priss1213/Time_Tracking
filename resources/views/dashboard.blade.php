@@ -1,12 +1,5 @@
 @extends('layouts.app')
 
-@php
-    $clockInDone = $clockInDone ?? true;
-    $breakStarted = $breakStarted ?? false;
-    $breakEnded = $breakEnded ?? false;
-    $clockOutDone = $clockOutDone ?? false;
-@endphp
-
 
 @section('content')
 <div class="container py-4">
@@ -21,20 +14,20 @@
     <div class="mb-4">
         <form action="{{ route('clock.in') }}" method="POST" style="display: inline-block;">
             @csrf
-            <button type="submit"  id="" class="btn btn-success btn-lg" >📥 Pointage Entrée</button>
+            <button type="submit"  id="clock-in-btn" class="btn btn-success btn-lg" >📥 Pointage Entrée</button>
         </form>
         <form action="{{ route('break.start') }}" method="POST" style="display: inline-block;">
             @csrf
-            <button type="submit" id="" class="btn btn-warning" >Commencer la pause</button>
+            <button type="submit" id="start-break-btn" class="btn btn-warning" >Commencer la pause</button>
         </form>
 
         <form action="{{ route('break.end') }}" method="POST" style="display: inline-block;">
             @csrf
-            <button type="submit" id="" class="btn btn-success" >Terminer la pause</button>
+            <button type="submit" id="end-break-btn" class="btn btn-success" >Terminer la pause</button>
         </form>
         <form action="{{ route('clock.out') }}" method="POST" style="display: inline-block; margin-left: 10px;">
             @csrf
-            <button type="submit" id="" class="btn btn-warning btn-lg" >📤 Pointage Sortie</button>
+            <button type="submit" id="clock-out-btn" class="btn btn-warning btn-lg" >📤 Pointage Sortie</button>
         </form>
 
 
@@ -42,39 +35,61 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const btnClockIn = document.getElementById('btn-clock-in');
-            const btnStartBreak = document.getElementById('btn-start-break');
-            const btnEndBreak = document.getElementById('btn-end-break');
-            const btnClockOut = document.getElementById('btn-clock-out');
+        document.addEventListener('DOMContentLoaded', function () {
+    const clockInBtn = document.getElementById('clock-in-btn');
+    const startBreakBtn = document.getElementById('start-break-btn');
+    const endBreakBtn = document.getElementById('end-break-btn');
+    const clockOutBtn = document.getElementById('clock-out-btn');
 
-            $timeRecord = 'some value';  // Initialisez la variable avant de l'utiliser
+    function updateButtonStates() {
+        fetch('/api/current-status')
+            .then(response => response.json())
+            .then(status => {
+                console.log('Statut actuel:', status); // Vérifie les données récupérées
+                clockInBtn.disabled = !status.canClockIn;
+                startBreakBtn.disabled = !status.canStartBreak;
+                endBreakBtn.disabled = !status.canEndBreak;
+                clockOutBtn.disabled = !status.canClockOut;
+                console.log('Boutons mis à jour.');
+            })
+            .catch(error => console.error('Erreur lors de la récupération du statut:', error));
+    }
+
+    // Charge l'état des boutons au chargement de la page
+    updateButtonStates();
+});
 
 
-                @if(!$timeRecord->clock_in_time)
-                    btnClockIn.disabled = false;
-                    btnStartBreak.disabled = true;
-                    btnEndBreak.disabled = true;
-                    btnClockOut.disabled = true;
-                @elseif(!$timeRecord->break_start_time)
-                    btnClockIn.disabled = true;
-                    btnStartBreak.disabled = false;
-                    btnEndBreak.disabled = true;
-                    btnClockOut.disabled = true;
-                @elseif(!$timeRecord->break_end_time)
-                    btnClockIn.disabled = true;
-                    btnStartBreak.disabled = true;
-                    btnEndBreak.disabled = false;
-                    btnClockOut.disabled = true;
-                @else
-                    btnClockIn.disabled = true;
-                    btnStartBreak.disabled = true;
-                    btnEndBreak.disabled = true;
-                    btnClockOut.disabled = false;
-                @endif
-        
+            // Ajouter des événements aux boutons
+            clockInBtn.addEventListener('click', () => {
+                fetch('/api/clock-in', { method: 'POST' })
+                    .then(() => updateButtonStates())
+                    .catch(error => console.error('Erreur lors du pointage:', error));
+            });
+
+            startBreakBtn.addEventListener('click', () => {
+                fetch('/api/start-break', { method: 'POST' })
+                    .then(() => updateButtonStates())
+                    .catch(error => console.error('Erreur lors du début de pause:', error));
+            });
+
+            endBreakBtn.addEventListener('click', () => {
+                fetch('/api/end-break', { method: 'POST' })
+                    .then(() => updateButtonStates())
+                    .catch(error => console.error('Erreur lors de la fin de pause:', error));
+            });
+
+            clockOutBtn.addEventListener('click', () => {
+                fetch('/api/clock-out', { method: 'POST' })
+                    .then(() => updateButtonStates())
+                    .catch(error => console.error('Erreur lors de la sortie:', error));
+            });
         });
     </script>
+
+
+
+
 
 
 
@@ -122,51 +137,7 @@
                     </tr>
                 @endif
 
-                        <script>
-                                document.addEventListener('DOMContentLoaded', () => {
-                        // Sélectionner les boutons
-                        const btnClockIn = document.getElementById('btn-clock-in');
-                        const btnStartBreak = document.getElementById('btn-start-break');
-                        const btnEndBreak = document.getElementById('btn-end-break');
-                        const btnClockOut = document.getElementById('btn-clock-out');
 
-                        // Désactiver les boutons au chargement initial
-                        btnStartBreak.disabled = true;
-                        btnEndBreak.disabled = true;
-                        btnClockOut.disabled = true;
-
-                        // Ajouter les gestionnaires d'événements
-                        btnClockIn.addEventListener('click', (e) => {
-                            e.preventDefault(); // Empêche la soumission immédiate du formulaire
-                            btnClockIn.disabled = true; // Désactiver "Pointage Entrée"
-                            btnStartBreak.disabled = false; // Activer "Commencer la pause"
-
-                            // Simuler une soumission après le traitement
-                            e.target.form.submit();
-                        });
-
-                        btnStartBreak.addEventListener('click', (e) => {
-                            e.preventDefault();
-                            btnStartBreak.disabled = true; // Désactiver "Commencer la pause"
-                            btnEndBreak.disabled = false; // Activer "Terminer la pause"
-                            e.target.form.submit();
-                        });
-
-                        btnEndBreak.addEventListener('click', (e) => {
-                            e.preventDefault();
-                            btnEndBreak.disabled = true; // Désactiver "Terminer la pause"
-                            btnClockOut.disabled = false; // Activer "Pointage Sortie"
-                            e.target.form.submit();
-                        });
-
-                        btnClockOut.addEventListener('click', (e) => {
-                            e.preventDefault();
-                            btnClockOut.disabled = true; // Désactiver "Pointage Sortie"
-                            alert('Votre journée est terminée.');
-                            e.target.form.submit();
-                        });
-                    });
-                    </script>
 
 
 

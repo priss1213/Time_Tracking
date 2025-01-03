@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TimeRecordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +18,13 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/api/current-status', [TimeRecordController::class, 'getCurrentStatus']);
+    Route::post('/api/clock-in', [TimeRecordController::class, 'clockIn']);
+    Route::post('/api/start-break', [TimeRecordController::class, 'startBreak']);
+    Route::post('/api/end-break', [TimeRecordController::class, 'endBreak']);
+    Route::post('/api/clock-out', [TimeRecordController::class, 'clockOut']);
+});
+
