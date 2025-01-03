@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-{{-- @php
-    $clockInDone = $clockInDone ?? false;
-    $breakStarted = $breakStarted ?? true;
+@php
+    $clockInDone = $clockInDone ?? true;
+    $breakStarted = $breakStarted ?? false;
     $breakEnded = $breakEnded ?? false;
     $clockOutDone = $clockOutDone ?? false;
-@endphp --}}
+@endphp
 
 
 @section('content')
@@ -21,27 +21,27 @@
     <div class="mb-4">
         <form action="{{ route('clock.in') }}" method="POST" style="display: inline-block;">
             @csrf
-            <button type="submit"   class="btn btn-success btn-lg" >📥 Pointage Entrée</button>
+            <button type="submit"  id="" class="btn btn-success btn-lg" >📥 Pointage Entrée</button>
         </form>
         <form action="{{ route('break.start') }}" method="POST" style="display: inline-block;">
             @csrf
-            <button type="submit"  class="btn btn-warning" >Commencer la pause</button>
+            <button type="submit" id="" class="btn btn-warning" >Commencer la pause</button>
         </form>
 
         <form action="{{ route('break.end') }}" method="POST" style="display: inline-block;">
             @csrf
-            <button type="submit"  class="btn btn-success" >Terminer la pause</button>
+            <button type="submit" id="" class="btn btn-success" >Terminer la pause</button>
         </form>
         <form action="{{ route('clock.out') }}" method="POST" style="display: inline-block; margin-left: 10px;">
             @csrf
-            <button type="submit" class="btn btn-warning btn-lg" >📤 Pointage Sortie</button>
+            <button type="submit" id="" class="btn btn-warning btn-lg" >📤 Pointage Sortie</button>
         </form>
 
 
 
     </div>
 
-    {{-- <script>
+    <script>
         document.addEventListener('DOMContentLoaded', () => {
             const btnClockIn = document.getElementById('btn-clock-in');
             const btnStartBreak = document.getElementById('btn-start-break');
@@ -72,9 +72,9 @@
                     btnEndBreak.disabled = true;
                     btnClockOut.disabled = false;
                 @endif
-            @endif
+        
         });
-    </script> --}}
+    </script>
 
 
 
@@ -121,7 +121,7 @@
                         <td colspan="4" class="text-center text-muted">Aucun enregistrement trouvé.</td>
                     </tr>
                 @endif
-{{--
+
                         <script>
                                 document.addEventListener('DOMContentLoaded', () => {
                         // Sélectionner les boutons
@@ -166,7 +166,7 @@
                             e.target.form.submit();
                         });
                     });
-                    </script> --}}
+                    </script>
 
 
 
