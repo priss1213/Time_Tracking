@@ -70,11 +70,10 @@ class TimeRecordController extends Controller
     // Charge les enregistrements de pointage de l'utilisateur
     $employee->load('timeRecords');
 
-    // États des boutons
-    $clockInDone = $timeRecord && $timeRecord->clock_in_time;
-    $breakStarted = $timeRecord && $timeRecord->break_start_time;
-    $breakEnded = $timeRecord && $timeRecord->break_end_time;
-    $clockOutDone = $timeRecord && $timeRecord->clock_out_time;
+
+        
+
+
 
     // Calcule les heures travaillées et ajoute les informations nécessaires pour la vue
     $timeRecords = $employee->timeRecords->map(function ($record) {
