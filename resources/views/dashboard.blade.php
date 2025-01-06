@@ -35,11 +35,19 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        ddocument.addEventListener('DOMContentLoaded', function () {
     const clockInBtn = document.getElementById('clock-in-btn');
     const startBreakBtn = document.getElementById('start-break-btn');
     const endBreakBtn = document.getElementById('end-break-btn');
     const clockOutBtn = document.getElementById('clock-out-btn');
+
+    // Simulez des états pour vérifier le comportement
+    clockInBtn.disabled = true;
+    startBreakBtn.disabled = true;
+    endBreakBtn.disabled = true;
+    clockOutBtn.disabled = true;
+});
+
 
     function updateButtonStates() {
         fetch('/api/current-status')
