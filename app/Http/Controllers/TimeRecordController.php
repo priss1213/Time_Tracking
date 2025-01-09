@@ -10,6 +10,9 @@ use Carbon\Carbon;
 
 class TimeRecordController extends Controller
 {
+    public function accueil(){
+        return view('accueil');
+    }
     /**
      * Affiche la page d'accueil ou le tableau de bord.
      */

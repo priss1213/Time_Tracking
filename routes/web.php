@@ -15,6 +15,7 @@ use App\Http\Controllers\AuthController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::get('/', [TimeRecordController::class, 'accueil']);
 Route::get('/login', [TimeRecordController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [TimeRecordController::class, 'processLogin']);
 Route::post('/logout', [TimeRecordController::class, 'logout'])->name('logout');

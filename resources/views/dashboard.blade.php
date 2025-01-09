@@ -36,29 +36,27 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-    const clockInBtn = document.getElementById('clock-in-btn');
-    const startBreakBtn = document.getElementById('start-break-btn');
-    const endBreakBtn = document.getElementById('end-break-btn');
-    const clockOutBtn = document.getElementById('clock-out-btn');
+            const clockInBtn = document.getElementById('clock-in-btn');
+            const startBreakBtn = document.getElementById('start-break-btn');
+            const endBreakBtn = document.getElementById('end-break-btn');
+            const clockOutBtn = document.getElementById('clock-out-btn');
 
-    function updateButtonStates() {
-        fetch('/api/current-status')
-            .then(response => response.json())
-            .then(status => {
-                console.log('Statut actuel:', status); // Vérifie les données récupérées
-                clockInBtn.disabled = !status.canClockIn;
-                startBreakBtn.disabled = !status.canStartBreak;
-                endBreakBtn.disabled = !status.canEndBreak;
-                clockOutBtn.disabled = !status.canClockOut;
-                console.log('Boutons mis à jour.');
-            })
-            .catch(error => console.error('Erreur lors de la récupération du statut:', error));
-    }
+            function updateButtonStates() {
+                fetch('/api/current-status')
+                    .then(response => response.json())
+                    .then(status => {
+                        console.log('Statut actuel:', status); // Vérifie les données récupérées
+                        clockInBtn.disabled = !status.canClockIn;
+                        startBreakBtn.disabled = !status.canStartBreak;
+                        endBreakBtn.disabled = !status.canEndBreak;
+                        clockOutBtn.disabled = !status.canClockOut;
+                        console.log('Boutons mis à jour.');
+                    })
+                    .catch(error => console.error('Erreur lors de la récupération du statut:', error));
+            }
 
-    // Charge l'état des boutons au chargement de la page
-    updateButtonStates();
-});
-
+            // Charge l'état des boutons au chargement de la page
+            updateButtonStates();
 
             // Ajouter des événements aux boutons
             clockInBtn.addEventListener('click', () => {
